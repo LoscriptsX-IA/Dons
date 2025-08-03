@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soutenez le projet en regardant des pubs</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Variables de Design --- */
+        :root {
+            --bg-dark: #1a1a1a;
+            --text-light: #f0f0f0;
+            --accent-color: #00ff00; /* Vert fluo, modifiez si vous préférez bleu ou violet */
+            --card-bg: #2a2a2a;
+            --border-color: #444;
+            --button-hover-bg: #00c700; /* Adaptez à la couleur d'accent */
+            --font-family: 'Poppins', sans-serif;
+            --transition-speed: 0.3s;
+        }
+
+        /* --- Styles Généraux --- */
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden; /* Empêche le défilement horizontal */
+            line-height: 1.6;
+        }
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            padding-top: 60px; /* Espace pour le header fixe */
+        }
+
+        /* --- Header --- */
+        .header {
+            background-color: var(--card-bg);
+            color: var(--text-light);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-sizing: border-box; /* Inclut le padding dans la largeur */
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: var(--accent-color);
+            letter-spacing: 1px;
+        }
+
+        .menu-icon {
+            font-size: 2em;
+            cursor: pointer;
+            color: var(--text-light);
+            display: none; /* Cache par défaut, visible sur mobile si menu implémenté */
+        }
+
+        /* --- Contenu Principal --- */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            max-width: 800px;
+            margin: 20px auto; /* Centre la zone principale */
+            width: 100%; /* S'assure qu'il prend la largeur disponible */
+            box-sizing: border-box;
+        }
+
+        /* --- Carte de Publicité --- */
+        .ad-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+            transition: opacity var(--transition-speed) ease-in-out, transform var(--transition-speed) ease-in-out;
+            min-height: 250px; /* Pour éviter le saut de contenu lors du chargement */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ad-card.fade-out {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .ad-card.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .ad-service-name {
+            font-size: 1.8em;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .ad-type {
+            font-size: 1.1em;
+            color: #ccc;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .ad-description {
+            font-size: 1em;
+            color: var(--text-light);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        /* --- Bouton "Voir la pub" --- */
+        .view-ad-button {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--bg-dark); /* Texte sombre sur bouton fluo */
+            padding: 12px 25px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+            box-shadow: 0 4px 10px rgba(0, 255, 0, 0.3); /* Ombre légère pour le fluo */
+        }
+
+        .view-ad-button:hover {
+            background-color: var(--button-hover-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 255, 0, 0.5);
+        }
+
+        /* --- Boutons de Navigation (Précédent/Suivant) --- */
+        .navigation-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .nav-button {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease, transform var(--transition-speed) ease;
+        }
+
+        .nav-button:hover {
+            background-color: var(--accent-color);
+            color: var(--bg-dark);
+            transform: translateY(-2px);
+        }
+
+        /* --- Widget de Solde --- */
+        .balance-widget {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            position: fixed; /* Reste visible en permanence */
+            right: 20px;
+            top: 80px; /* Sous le header */
+            z-index: 900;
+            text-align: center;
+            min-width: 180px;
+            box-sizing: border-box;
+            border: 1px solid var(--border-color);
+        }
+
+        .balance-label {
+            font-size: 1em;
+            color: #ccc;
+            margin-bottom: 5px;
+        }
+
+        .balance-value {
+            font-size: 2em;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            transition: transform 0.2s ease-out, color 0.2s ease-out; /* Pour l'animation */
+        }
+
+        /* Animation du solde */
+        @keyframes pulse-balance {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .balance-value.animate-balance {
+            animation: pulse-balance 0.5s ease-in-out;
+            color: #fff; /* Surligne en blanc ou une autre couleur pendant l'animation */
+        }
+
+        .reset-button {
+            background-color: transparent;
+            color: #ff6347; /* Rouge tomate pour le reset */
+            border: 1px solid #ff6347;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+
+        .reset-button:hover {
+            background-color: #ff6347;
+            color: white;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background-color: var(--card-bg);
+            color: #aaa;
+            text-align: center;
+            padding: 20px;
+            margin-top: auto; /* Pousse le footer en bas */
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+            font-size: 0.9em;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px 15px;
+            }
+
+            .logo {
+                font-size: 1.5em;
+            }
+
+            .menu-icon {
+                display: block; /* Affiche l'icône de menu sur mobile */
+            }
+
+            .balance-widget {
+                position: static; /* Le solde se place dans le flux sur mobile */
+                margin: 20px auto;
+                width: calc(100% - 40px);
+                max-width: 300px;
+            }
+
+            .main-content {
+                padding: 15px;
+                margin-top: 0; /* Pas de marge supérieure si le widget est en statique */
+            }
+
+            .ad-card {
+                padding: 20px;
+                min-height: 200px;
+            }
+
+            .ad-service-name {
+                font-size: 1.5em;
+            }
+
+            .view-ad-button {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+
+            .navigation-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-button {
+                width: 80%;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <header class="header">
+            <div class="logo">AdView</div>
+            <div class="menu-icon">☰</div>
+        </header>
+
+        <aside id="balance-widget" class="balance-widget">
+            <div class="balance-label">Votre Solde :</div>
+            <div id="current-balance" class="balance-value">0.00 €</div>
+            <button id="reset-balance-btn" class="reset-button">Réinitialiser le solde</button>
+        </aside>
+
+        <main class="main-content">
+            <div id="ad-card" class="ad-card">
+                <h3 id="ad-service-name" class="ad-service-name">Chargement...</h3>
+                <p id="ad-type" class="ad-type"></p>
+                <p id="ad-description" class="ad-description"></p>
+                <a id="view-ad-btn" class="view-ad-button" href="#" target="_blank" rel="noopener noreferrer">Voir la pub</a>
+            </div>
+            <div class="navigation-buttons">
+                <button id="prev-ad-btn" class="nav-button">Précédent</button>
+                <button id="next-ad-btn" class="nav-button">Suivant</button>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Merci de regarder ces publicités pour soutenir le projet. Chaque interaction compte. 🙏</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- Données des Publicités ---
+        const ads = [
+            {
+                service: "Adsterra",
+                type: "Popunder (Fenêtre discrète)",
+                description: "Ouvre une nouvelle fenêtre ou onglet en arrière-plan. Peut ne pas être immédiatement visible.",
+                link: "https://www.adsterra.com/blog/what-is-popunder/" // Exemple de lien explicatif
+            },
+            {
+                service: "PropellerAds",
+                type: "Redirection (Cliquez pour visiter)",
+                description: "Vous redirige vers une page publicitaire. Veuillez revenir pour continuer.",
+                link: "https://propellerads.com/blog/url-redirect-ads/" // Exemple de lien explicatif
+            },
+            {
+                service: "Ezoic",
+                type: "Vidéo (Pre-roll)",
+                description: "Une courte vidéo publicitaire se lance avant un contenu simulé. Laissez-la jouer.",
+                link: "https://www.ezoic.com/blog/what-is-pre-roll-ad/" // Exemple de lien explicatif
+            },
+            {
+                service: "Media.net",
+                type: "Interstitiel (Page complète)",
+                description: "Une page publicitaire plein écran apparaît. Fermez-la pour continuer.",
+                link: "https://www.media.net/publishers/products/interstitial/" // Exemple de lien explicatif
+            },
+            {
+                service: "Clickadu",
+                type: "Bouton (Redirection)",
+                description: "Cliquez sur ce bouton pour être redirigé vers une offre. Une simple interaction suffit.",
+                link: "https://www.clickadu.com/blog/what-is-a-clickadu-button/" // Exemple de lien explicatif
+            },
+            {
+                service: "Mgid",
+                type: "Native Ad (Article sponsorisé)",
+                description: "Une publicité intégrée qui ressemble à un contenu éditorial. Cliquez sur le lien pour simuler la visite.",
+                link: "https://www.mgid.com/blog/what-are-native-ads/" // Exemple de lien explicatif
+            },
+            {
+                service: "AdSense",
+                type: "Bannière (Simulée)",
+                description: "Simule le clic sur une bannière publicitaire standard. Merci de votre soutien !",
+                link: "https://ads.google.com/intl/fr_fr/start/how-it-works/"
+            },
+            {
+                service: "Outbrain",
+                type: "Recommandation de Contenu",
+                description: "Découvrez un article ou un produit recommandé. Votre clic aide le projet.",
+                link: "https://www.outbrain.com/what-we-do/"
+            }
+        ];
+
+        // --- Variables d'État ---
+        let currentAdIndex = 0;
+        const clickValue = 0.05; // Valeur en € ou points par clic
+        let currentBalance = parseFloat(localStorage.getItem('userBalance')) || 0.00;
+
+        // --- Éléments du DOM ---
+        const adCard = document.getElementById('ad-card');
+        const adServiceName = document.getElementById('ad-service-name');
+        const adType = document.getElementById('ad-type');
+        const adDescription = document.getElementById('ad-description');
+        const viewAdBtn = document.getElementById('view-ad-btn');
+        const prevAdBtn = document.getElementById('prev-ad-btn');
+        const nextAdBtn = document.getElementById('next-ad-btn');
+        const currentBalanceDisplay = document.getElementById('current-balance');
+        const resetBalanceBtn = document.getElementById('reset-balance-btn');
+
+        // --- Fonctions ---
+
+        /**
+         * Met à jour l'affichage du solde de l'utilisateur.
+         * Applique une petite animation pour indiquer le changement.
+         */
+        function updateBalanceDisplay() {
+            currentBalanceDisplay.textContent = currentBalance.toFixed(2) + ' €';
+            // Animation: ajouter/retirer la classe pour l'effet visuel
+            currentBalanceDisplay.classList.add('animate-balance');
+            setTimeout(() => {
+                currentBalanceDisplay.classList.remove('animate-balance');
+            }, 500); // Durée de l'animation CSS
+        }
+
+        /**
+         * Augmente le solde de l'utilisateur après un clic sur une pub.
+         * Met à jour le stockage local et l'affichage.
+         */
+        function increaseBalance() {
+            currentBalance += clickValue;
+            // Stocke le solde avec deux décimales pour éviter les problèmes de flottants
+            localStorage.setItem('userBalance', currentBalance.toFixed(2));
+            updateBalanceDisplay();
+        }
+
+        /**
+         * Affiche la publicité correspondant à l'index donné.
+         * Applique une transition fluide.
+         * @param {number} index - L'index de la publicité à afficher dans le tableau `ads`.
+         */
+        function displayAd(index) {
+            // Applique une classe pour la transition de sortie
+            adCard.classList.remove('fade-in');
+            adCard.classList.add('fade-out');
+
+            setTimeout(() => {
+                const ad = ads[index];
+                if (ad) {
+                    adServiceName.textContent = ad.service;
+                    adType.textContent = ad.type;
+                    adDescription.textContent = ad.description;
+                    viewAdBtn.href = ad.link;
+
+                    // Supprime l'ancien écouteur de clic pour éviter les accumulations
+                    // (Pas nécessaire si l'on gère le clic directement sur le bouton "Voir la pub")
+                    // Cependant, si le lien ouvrait une fenêtre popup gérée par JS, il faudrait déréférencer
+                    // Ici, le `href` et `target="_blank"` suffisent.
+                    // L'incrémentation du solde est liée au clic sur le bouton, pas à l'ouverture du lien en tant que tel.
+
+                    // Réactive le bouton "Voir la pub" si besoin (utile si on l'avait désactivé temporairement)
+                    viewAdBtn.classList.remove('disabled');
+                    viewAdBtn.style.pointerEvents = 'auto'; // Assure que le bouton est cliquable
+
+                    // Applique une classe pour la transition d'entrée
+                    adCard.classList.remove('fade-out');
+                    adCard.classList.add('fade-in');
+                } else {
+                    // Gérer le cas où l'index est invalide
+                    adServiceName.textContent = "Aucune publicité disponible";
+                    adType.textContent = "";
+                    adDescription.textContent = "Veuillez réessayer plus tard ou réinitialiser le solde.";
+                    viewAdBtn.href = "#";
+                    viewAdBtn.classList.add('disabled'); // Désactiver le bouton
+                    viewAdBtn.style.pointerEvents = 'none';
+                }
+            }, 300); // Temps correspondant à la durée de la transition 'fade-out'
+        }
+
+        // --- Gestionnaires d'Événements ---
+
+        // Clic sur le bouton "Voir la pub"
+        viewAdBtn.addEventListener('click', (event) => {
+            // La navigation vers le lien se fait naturellement via `href` et `target="_blank"`.
+            // On incrémente le solde *après* que l'utilisateur a initié l'action de "voir la pub".
+            increaseBalance();
+            // Optionnel : Désactiver le bouton temporairement pour éviter les spams de clics sur la même pub
+            // viewAdBtn.classList.add('disabled');
+            // viewAdBtn.style.pointerEvents = 'none';
+        });
+
+        // Clic sur le bouton "Suivant"
+        nextAdBtn.addEventListener('click', () => {
+            currentAdIndex = (currentAdIndex + 1) % ads.length; // Boucle vers le début si on atteint la fin
+            displayAd(currentAdIndex);
+        });
+
+        // Clic sur le bouton "Précédent"
+        prevAdBtn.addEventListener('click', () => {
+            currentAdIndex = (currentAdIndex - 1 + ads.length) % ads.length; // Gère le cas où on est au début (modulo avec addition de length)
+            displayAd(currentAdIndex);
+        });
+
+        // Clic sur le bouton "Réinitialiser le solde"
+        resetBalanceBtn.addEventListener('click', () => {
+            if (confirm("Êtes-vous sûr de vouloir réinitialiser votre solde ? Cette action est irréversible.")) {
+                localStorage.removeItem('userBalance'); // Supprime la donnée du localStorage
+                currentBalance = 0.00;
+                updateBalanceDisplay(); // Met à jour l'affichage
+                alert("Votre solde a été réinitialisé.");
+            }
+        });
+
+        // --- Initialisation au Chargement de la Page ---
+        document.addEventListener('DOMContentLoaded', () => {
+            updateBalanceDisplay(); // Affiche le solde initial au chargement
+            displayAd(currentAdIndex); // Charge et affiche la première pub
+        });
+    </script>
+</body>
+</html>
