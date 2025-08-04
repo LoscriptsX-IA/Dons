@@ -4,323 +4,163 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="ppck-ver" content="3b903eeae9aca0dc5d017a699fc24bb2" />
-    <title>Soutenez le projet en regardant des pubs</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
+    <title>Soutenez l'Avenir de l'IA</title>
     <style>
-        /* --- Variables de Design --- */
+        /* --- Importation de la police futuriste --- */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        /* --- Variables de couleur --- */
         :root {
-            --bg-dark: #1a1a1a;
-            --text-light: #f0f0f0;
-            --accent-color: #00ff00; /* Vert fluo, modifiez si vous préférez bleu ou violet */
-            --card-bg: #2a2a2a;
-            --border-color: #444;
-            --button-hover-bg: #00c700; /* Adaptez à la couleur d'accent */
-            --font-family: 'Poppins', sans-serif;
-            --transition-speed: 0.3s;
+            --primary-color: #00e5ff; /* Cyan électrique */
+            --secondary-color: #ff00c1; /* Magenta néon */
+            --background-color: #0a0a1f; /* Bleu nuit très sombre */
+            --container-bg: rgba(20, 20, 45, 0.8); /* Fond du conteneur un peu plus opaque */
+            --text-color: #e0e0e0;
+            --border-color: rgba(0, 229, 255, 0.4);
         }
 
-        /* --- Styles Généraux --- */
+        /* --- Style général du corps ---
+             LA CORRECTION PRINCIPALE EST ICI : 
+             On supprime 'display: flex' et 'min-height: 100vh' pour permettre un flux de page naturel et donc un défilement infini.
+        --- */
         body {
-            font-family: var(--font-family);
-            background-color: var(--bg-dark);
-            color: var(--text-light);
+            font-family: 'Orbitron', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            overflow-x: hidden; /* Empêche le défilement horizontal */
-            line-height: 1.6;
+            /* Le fond quadrillé est maintenant fixe pour un effet de parallaxe lors du scroll */
+            background-image: 
+                linear-gradient(var(--border-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-attachment: fixed; /* Le fond reste en place quand on défile */
         }
 
-        #app {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            padding-top: 60px; /* Espace pour le header fixe */
-        }
-
-        /* --- Header --- */
-        .header {
-            background-color: var(--card-bg);
-            color: var(--text-light);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            box-sizing: border-box; /* Inclut le padding dans la largeur */
-        }
-
-        .logo {
-            font-size: 1.8em;
-            font-weight: 600;
-            color: var(--accent-color);
-            letter-spacing: 1px;
-        }
-
-        .menu-icon {
-            font-size: 2em;
-            cursor: pointer;
-            color: var(--text-light);
-            display: none; /* Cache par défaut, visible sur mobile si menu implémenté */
-        }
-
-        /* --- Contenu Principal --- */
-        .main-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            text-align: center;
-            max-width: 800px;
-            margin: 20px auto; /* Centre la zone principale */
-            width: 100%; /* S'assure qu'il prend la largeur disponible */
-            box-sizing: border-box;
-        }
-
-        /* --- Carte de Publicité --- */
-        .ad-card {
-            background-color: var(--card-bg);
+        /* --- Conteneur principal --- */
+        .main-container {
+            max-width: 900px;
+            /* 'margin: 40px auto' centre le bloc horizontalement et ajoute de l'espace en haut/bas */
+            margin: 40px auto; 
+            padding: 2rem 3rem;
+            background: var(--container-bg);
+            border: 2px solid var(--border-color);
             border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-            padding: 30px;
-            margin-bottom: 30px;
-            width: 100%;
-            max-width: 500px;
-            box-sizing: border-box;
-            transition: opacity var(--transition-speed) ease-in-out, transform var(--transition-speed) ease-in-out;
-            min-height: 250px; /* Pour éviter le saut de contenu lors du chargement */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.2);
+            backdrop-filter: blur(10px);
+            text-align: center;
         }
 
-        .ad-card.fade-out {
-            opacity: 0;
-            transform: translateY(20px);
+        /* --- Titres --- */
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: var(--primary-color);
+            text-shadow: 0 0 8px var(--primary-color), 0 0 16px var(--primary-color);
+            margin-bottom: 1rem;
+            letter-spacing: 3px;
+            font-weight: 700;
         }
 
-        .ad-card.fade-in {
-            opacity: 1;
-            transform: translateY(0);
+        h2 {
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            color: var(--text-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
         }
 
-        .ad-service-name {
-            font-size: 1.8em;
-            color: var(--accent-color);
-            margin-bottom: 10px;
-            font-weight: 600;
+        /* --- Paragraphes --- */
+        p {
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            line-height: 1.8;
+            text-align: left;
+            margin-bottom: 1.5rem;
         }
 
-        .ad-type {
-            font-size: 1.1em;
-            color: #ccc;
-            margin-bottom: 15px;
-            font-style: italic;
-        }
-
-        .ad-description {
-            font-size: 1em;
-            color: var(--text-light);
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-
-        /* --- Bouton "Voir la pub" --- */
-        .view-ad-button {
+        /* --- Bouton d'appel à l'action --- */
+        .cta-button {
             display: inline-block;
-            background-color: var(--accent-color);
-            color: var(--bg-dark); /* Texte sombre sur bouton fluo */
-            padding: 12px 25px;
-            border: none;
-            border-radius: 30px;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
-            box-shadow: 0 4px 10px rgba(0, 255, 0, 0.3); /* Ombre légère pour le fluo */
-        }
-
-        .view-ad-button:hover {
-            background-color: var(--button-hover-bg);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 255, 0, 0.5);
-        }
-
-        /* --- Boutons de Navigation (Précédent/Suivant) --- */
-        .navigation-buttons {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .nav-button {
-            background-color: var(--card-bg);
-            color: var(--accent-color);
-            border: 2px solid var(--accent-color);
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease, transform var(--transition-speed) ease;
-        }
-
-        .nav-button:hover {
-            background-color: var(--accent-color);
-            color: var(--bg-dark);
-            transform: translateY(-2px);
-        }
-
-        /* --- Widget de Solde --- */
-        .balance-widget {
-            background-color: var(--card-bg);
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-            padding: 20px;
-            position: fixed; /* Reste visible en permanence */
-            right: 20px;
-            top: 80px; /* Sous le header */
-            z-index: 900;
-            text-align: center;
-            min-width: 180px;
-            box-sizing: border-box;
-            border: 1px solid var(--border-color);
-        }
-
-        .balance-label {
-            font-size: 1em;
-            color: #ccc;
-            margin-bottom: 5px;
-        }
-
-        .balance-value {
-            font-size: 2em;
-            font-weight: 600;
-            color: var(--accent-color);
-            margin-bottom: 15px;
-            transition: transform 0.2s ease-out, color 0.2s ease-out; /* Pour l'animation */
-        }
-
-        /* Animation du solde */
-        @keyframes pulse-balance {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .balance-value.animate-balance {
-            animation: pulse-balance 0.5s ease-in-out;
-            color: #fff; /* Surligne en blanc ou une autre couleur pendant l'animation */
-        }
-
-        .reset-button {
+            font-family: 'Orbitron', sans-serif;
             background-color: transparent;
-            color: #ff6347; /* Rouge tomate pour le reset */
-            border: 1px solid #ff6347;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 10px;
             cursor: pointer;
-            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+            transition: all 0.4s ease;
+            box-shadow: 0 0 15px var(--primary-color), inset 0 0 10px var(--primary-color);
+            margin-top: 2rem;
         }
 
-        .reset-button:hover {
-            background-color: #ff6347;
-            color: white;
+        .cta-button:hover {
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            box-shadow: 0 0 25px var(--primary-color), 0 0 50px var(--primary-color);
+            transform: scale(1.05);
+        }
+        
+        /* --- Pied de page --- */
+        footer {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.7;
         }
 
-        /* --- Footer --- */
-        .footer {
-            background-color: var(--card-bg);
-            color: #aaa;
-            text-align: center;
-            padding: 20px;
-            margin-top: auto; /* Pousse le footer en bas */
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
-            font-size: 0.9em;
-        }
-
-        /* --- Responsive Design --- */
+        /* --- Media Queries pour la responsivité (inchangées, toujours efficaces) --- */
         @media (max-width: 768px) {
-            .header {
-                padding: 10px 15px;
+            .main-container {
+                width: auto;
+                margin: 20px 15px; /* Marge sur les côtés pour ne pas coller au bord */
+                padding: 1.5rem 1.5rem;
             }
 
-            .logo {
-                font-size: 1.5em;
-            }
-
-            .menu-icon {
-                display: block; /* Affiche l'icône de menu sur mobile */
-            }
-
-            .balance-widget {
-                position: static; /* Le solde se place dans le flux sur mobile */
-                margin: 20px auto;
-                width: calc(100% - 40px);
-                max-width: 300px;
-            }
-
-            .main-content {
-                padding: 15px;
-                margin-top: 0; /* Pas de marge supérieure si le widget est en statique */
-            }
-
-            .ad-card {
-                padding: 20px;
-                min-height: 200px;
-            }
-
-            .ad-service-name {
-                font-size: 1.5em;
-            }
-
-            .view-ad-button {
-                padding: 10px 20px;
-                font-size: 1em;
-            }
-
-            .navigation-buttons {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .nav-button {
-                width: 80%;
-                margin: 0 auto;
+            p {
+                text-align: justify; /* Améliore la lisibilité sur petit écran */
             }
         }
     </style>
 </head>
 <body>
-    <div id="app">
-        <header class="header">
-            <div class="logo">AdView</div>
-            <div class="menu-icon">☰</div>
-        </header>
 
-        <aside id="balance-widget" class="balance-widget">
-            <div class="balance-label">Votre Solde :</div>
-            <div id="current-balance" class="balance-value">0.00 €</div>
-            <button id="reset-balance-btn" class="reset-button">Réinitialiser le solde</button>
-        </aside>
+    <div class="main-container">
+        <h1>Construisez le Futur avec Nous</h1>
+        <p>
+            Nous sommes au seuil d'une nouvelle ère. Notre projet d'Intelligence Artificielle n'est pas seulement une avancée technologique ; c'est une promesse pour un avenir plus intelligent, plus efficace et plus humain. Nous développons des algorithmes capables de relever les plus grands défis de notre temps, de la médecine personnalisée à la lutte contre le changement climatique.
+        </p>
 
-        <main class="main-content">
-            <div id="ad-card" class="ad-card">
-                <h3 id="ad-service-name" class="ad-service-name">Chargement...</h3>
+        <h2>Notre Vision 🚀</h2>
+        <p>
+            Imaginez une IA qui collabore avec les scientifiques pour accélérer la découverte de nouveaux traitements, une IA qui optimise nos réseaux énergétiques pour un monde durable, ou encore une IA qui rend l'éducation accessible et personnalisée pour tous. C'est cet avenir que nous bâtissons. Notre équipe est composée d'experts passionnés, mais pour que nos prototypes deviennent des solutions globales, nous avons besoin de ressources.
+        </p>
+
+        <h2>Pourquoi votre soutien est crucial 💡</h2>
+        <p>
+            Le développement d'une IA de pointe requiert une puissance de calcul considérable, des jeux de données massifs et des mois de recherche et développement. Chaque don, petit ou grand, est un investissement direct dans l'infrastructure, le talent et les outils nécessaires pour franchir la prochaine étape. Votre soutien nous permettra d'accélérer nos recherches et de transformer notre vision en une réalité tangible.
+        </p>
+
+        <p>
+            Ensemble, nous pouvons repousser les limites de la connaissance et créer un futur où la technologie sert l'humanité. Rejoignez cette aventure.
+        </p>
+
+        <a href="https://x-ai.fr/Dons" target="_blank" rel="noopener noreferrer" class="cta-button">
+            Faire un Don
+        </a>
+        
+        <footer>
+            <p style="text-align: center; margin-bottom: 0;">Projet IA - Tous droits réservés &copy; 2025</p>
+        </footer>
+    </div>
+
+</body>
+</html>nt...</h3>
                 <p id="ad-type" class="ad-type"></p>
                 <p id="ad-description" class="ad-description"></p>
                 <a id="view-ad-btn" class="view-ad-button" href="#" target="_blank" rel="noopener noreferrer">Voir la pub</a>
