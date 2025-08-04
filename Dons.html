@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="ppck-ver" content="cbe7572db434fcd75d8434fe838b8692"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="ppck-ver" content="cbe7572db434fcd75d8434fe838b8692" />
     <title>Découvrez de Nouveaux Sites</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
@@ -74,21 +74,6 @@
             }
         }
     </style>
-
-    <script type="text/javascript">
-        function showPopcashAd() {
-            var uid = '493387';
-            var wid = '744115';
-            var pop_tag = document.createElement('script');
-            pop_tag.src = '//cdn.popcash.net/show.js';
-            document.body.appendChild(pop_tag);
-            pop_tag.onerror = function () {
-                pop_tag = document.createElement('script');
-                pop_tag.src = '//cdn2.popcash.net/show.js';
-                document.body.appendChild(pop_tag);
-            };
-        }
-    </script>
 </head>
 <body>
 
@@ -97,9 +82,36 @@
         <p>
             Cliquez sur le bouton ci-dessous et regardez une courte publicité. C'est une excellente façon de nous soutenir tout en découvrant de nouveaux sites et services intéressants !
         </p>
-        
-        <a href="#" class="cta-button" onclick="showPopcashAd()">Découvrir un site</a>
+        <a href="javascript:void(0)" class="cta-button" onclick="showPopcashAd()">Découvrir un site</a>
     </div>
+
+    <script>
+        var uid = '493387';
+        var wid = '744115';
+
+        function loadPopcashScript() {
+            var pop_tag = document.createElement('script');
+            pop_tag.src = '//cdn.popcash.net/show.js';
+            pop_tag.async = true;
+            pop_tag.onerror = function () {
+                var pop_tag2 = document.createElement('script');
+                pop_tag2.src = '//cdn2.popcash.net/show.js';
+                pop_tag2.async = true;
+                document.body.appendChild(pop_tag2);
+            };
+            document.body.appendChild(pop_tag);
+        }
+
+        window.onload = loadPopcashScript;
+
+        function showPopcashAd() {
+            if (typeof PopAds !== 'undefined' && typeof PopAds.showPopUnder === 'function') {
+                PopAds.showPopUnder();
+            } else {
+                alert("La publicité n'est pas encore prête, merci de réessayer.");
+            }
+        }
+    </script>
 
 </body>
 </html>
